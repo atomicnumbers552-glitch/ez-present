@@ -7,9 +7,13 @@ export const dynamic = "force-dynamic";
 //    4. store everything in MongoDB
 
 // in their sample audio, the user must say:
+
+
 // "This system converts written text into natural-sounding speech.
 // Each word is processed, analyzed for context, and generated with the correct intonation.
 // The goal is to make digital voices sound as close to human conversation as possible."
+
+
 
 import { NextResponse } from "next/server";
 import { generateTranscript, generateClonedAudio } from "./logicFunctions";

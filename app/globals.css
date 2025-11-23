@@ -47,17 +47,39 @@
 }
 
 :root {
-    --spacing-xs: 4px;      /* extra small */
-  --spacing-sm: 8px;      /* small */
-  --spacing-sm2: 12px;    /* small + extra */
-  --spacing-md: 16px;     /* medium */
-  --spacing-md2: 20px;    /* medium + extra */
-  --spacing-lg: 28px;     /* large */
-  --spacing-lg2: 40px;    /* large + extra */
-  --spacing-xl: 60px;     /* extra large */
-  --spacing-xxl: 100px;   /* double extra large */
-  --spacing-3xl: 160px;   /* triple extra large */
-  --spacing-4xl: 240px;   /* quadruple extra large */
+  --spacing-xs: 4px; /* extra small */
+  --spacing-sm: 8px; /* small */
+  --spacing-sm2: 12px; /* small + extra */
+  --spacing-md: 16px; /* medium */
+  --spacing-md2: 20px; /* medium + extra */
+  --spacing-lg: 28px; /* large */
+  --spacing-lg2: 40px; /* large + extra */
+  --spacing-xl: 60px; /* extra large */
+  --spacing-xxl: 100px; /* double extra large */
+  --spacing-3xl: 160px; /* triple extra large */
+  --spacing-4xl: 240px; /* quadruple extra large */
+}
+h1 {
+  font-size: 60px;
+  text-align: center;
+}
+
+.buttonlabel {
+  border: 1px solid rgb(0, 0, 0);
+  padding: 15px;
+  padding-top: 20px;
+  margin: 10px;
+}
+
+.widgets {
+  align-self: center;
+}
+
+.placeholder {
+  font-size: xx-large;
+}
+
+:root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
@@ -133,16 +155,13 @@
   body {
     @apply bg-background text-foreground;
   }
-
-
 }
 
 @layer components {
   .dropzone {
-      width: 50% !important;
-      height: var(--spacing-lg2) !important;
-      border: 0 !important;
-      box-shadow: none !important;
+    width: 50% !important;
+    height: var(--spacing-lg2) !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
-
 }

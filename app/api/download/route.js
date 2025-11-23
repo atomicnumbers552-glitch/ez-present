@@ -4,6 +4,8 @@ import { ObjectId, GridFSBucket } from "mongodb";
 
 export async function GET(req) {
   try {
+    const db = await getDb();
+
     const bucket = new GridFSBucket(db, { bucketName: "audios" });
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id"); // pass ?id=<presentationId> in the download link
@@ -15,7 +17,6 @@ export async function GET(req) {
       );
     }
 
-    const db = await getDb();
     const collection = db.collection("presentations");
     const presentation = await collection.findOne({ _id: new ObjectId(id) });
 
