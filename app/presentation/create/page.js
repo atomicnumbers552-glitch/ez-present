@@ -100,7 +100,7 @@ export default function Page() {
         >
           {!audioFile ? (
             <div className="flex w-full items-center gap-4 p-8">
-              <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+              <div className="cursor-pointer flex size-16 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                 <UploadIcon size={16} />
               </div>
               <div className="text-left">
@@ -125,7 +125,7 @@ export default function Page() {
         >
           {!slidesFile ? (
             <div className="flex w-full items-center gap-4 p-8">
-              <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+              <div className="flex size-16 cursor-pointer items-center justify-center rounded-lg bg-muted text-muted-foreground">
                 <UploadIcon size={24} />
               </div>
               <div className="text-left">
@@ -142,7 +142,7 @@ export default function Page() {
       </div>
 
       <Button
-        className="w-1/2 h-[var(--spacing-xl)] text-lg font-semibold mt-[var(--spacing-lg)]"
+        className="w-1/2 h-[var(--spacing-xl)] cursor-pointer text-lg font-semibold mt-[var(--spacing-lg)]"
         onClick={handleUpload}
         disabled={loading}
       >

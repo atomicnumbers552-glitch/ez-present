@@ -28,7 +28,9 @@ export default function DownloadPage() {
       <div className="widgets">
         <h1>Presentation Ready!</h1>
 
-        <Button onClick={handleDownload}>Download Here</Button>
+        <Button onClick={handleDownload} className="cursor-pointer">
+          Download Here
+        </Button>
       </div>
     </main>
   );

@@ -3,11 +3,11 @@ import { FishAudioClient } from "fish-audio";
 import { getDb } from "@/lib/mongodb";
 import { ObjectId, GridFSBucket } from "mongodb";
 
-function downloadStreamToBuf(id) {
-  const db = getDb();
+async function downloadStreamToBuf(id) {
+  const db = await getDb();
   const bucket = new GridFSBucket(db, { bucketName: "audios" });
   const stream = bucket.openDownloadStream(id);
-    return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const chunks = [];
 
     stream.on("data", (chunk) => chunks.push(chunk));
@@ -17,26 +17,30 @@ function downloadStreamToBuf(id) {
 }
 
 async function getSlideTransitions(id) {
-  const buf = await downloadStreamToBuf(id)
+  const buf = await downloadStreamToBuf(id);
+  const db = await getDb();
 
   const bucket = new GridFSBucket(db, { bucketName: "audios" });
   const stream = bucket.openDownloadStream(id);
-    const webStream = new ReadableStream({
-      async start(controller) {
-        stream.on("data", (chunk) => controller.enqueue(chunk));
-        stream.on("end", () => controller.close());
-        stream.on("error", (err) => controller.error(err));
-      },
-    });
+  const webStream = new ReadableStream({
+    async start(controller) {
+      stream.on("data", (chunk) => controller.enqueue(chunk));
+      stream.on("end", () => controller.close());
+      stream.on("error", (err) => controller.error(err));
+    },
+  });
 
   const file = new File(buf, id, {
-    type: "audio/mpeg"
-  })
+    type: "audio/mpeg",
+  });
 
-  const fish = FishAudioClient()
+  const fish = new FishAudioClient();
   const res = await fish.speechToText.convert({ audio: webStream });
-    for (const seg of res.segments ?? []) 
-      console.log(`[${seg.start.toFixed(2)}s - ${seg.end.toFixed(2)}s] ${seg.text}`);
+  console.log("RES SEGMENTS", res.segments);
+  for (const seg of res.segments ?? [])
+    console.log(
+      `[${seg.start.toFixed(2)}s - ${seg.end.toFixed(2)}s] ${seg.text}`
+    );
 }
 
 export async function GET(req) {
@@ -74,7 +78,7 @@ export async function GET(req) {
       },
     });
 
-    getSlideTransitions(presentation.audioFileId)
+    await getSlideTransitions(presentation.audioFileId);
     // Return the file as a download
     return new Response(webStream, {
       headers: {

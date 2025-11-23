@@ -1,14 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
 const geistSans = Geist({
@@ -34,17 +32,18 @@ export default function RootLayout({ children }) {
       >
         <NavigationMenu className="px-2">
           <NavigationMenuList>
-            <i>
-              <b>ez-present</b>
-            </i>
+            <Link href="/">
+              {" "}
+              <i>
+                <b>ez-present</b>
+              </i>
+            </Link>
+
             <NavigationMenuItem>
-              <NavigationMenuLink>
-                <i>Home</i>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink>
-                <i>Upload</i>
+              <NavigationMenuLink asChild>
+                <Link href="/presentation/create">
+                  <i>Create</i>
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
