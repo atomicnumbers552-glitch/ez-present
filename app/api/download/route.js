@@ -4,7 +4,7 @@ import { ObjectId, GridFSBucket } from "mongodb";
 
 export async function GET(req) {
   try {
-    const bucket = new GridFSBucket(db, { bucketName: "audios " });
+    const bucket = new GridFSBucket(db, { bucketName: "audios" });
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id"); // pass ?id=<presentationId> in the download link
 
@@ -29,16 +29,12 @@ export async function GET(req) {
     // Fetch the audio file from the stored URL
     const downloadStream = bucket.openDownloadStream(presentation.audioFileId);
     const webStream = new ReadableStream({
-  async start(controller) {
-    downloadStream.on("data", (chunk) => controller.enqueue(chunk));
-    downloadStream.on("end", () => controller.close());
-    downloadStream.on("error", (err) => controller.error(err));
-  },
-});
-
-    res.setHeader("Content-Type", "audio/mpeg"); // change MIME type to match your file
-    res.setHeader("Content-Disposition", `attachment; filename="audio.mp3"`);
-
+      async start(controller) {
+        downloadStream.on("data", (chunk) => controller.enqueue(chunk));
+        downloadStream.on("end", () => controller.close());
+        downloadStream.on("error", (err) => controller.error(err));
+      },
+    });
 
     // Return the file as a download
     return new Response(webStream, {
