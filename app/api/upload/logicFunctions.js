@@ -13,7 +13,7 @@ export async function generateTranscript(slidesFile) {
 
   const contents = [
     {
-      text: "Generate a presentation transcript from these slides, preserving context and flow.",
+      text: "You are given a pdf version of slides. Please generate a transcript that represents these slides, as if it is for a presentation or a lecture. Make sure to generate a transcript that makes sense when it is being read along in tandem with these slides.",
     },
     {
       inlineData: {
