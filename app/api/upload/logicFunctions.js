@@ -1,5 +1,4 @@
 import { FishAudioClient } from "fish-audio";
-import { GeminiClient } from "@google-ai/gemini-api"; // adjust import if needed
 import { GoogleGenAI } from "@google/genai";
 
 // Uses Gemini document understanding to generate a transcript given the .pdf file containing the slides
