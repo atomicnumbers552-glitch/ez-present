@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,20 +32,25 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NavigationMenu>
+        <NavigationMenu className="px-2">
           <NavigationMenuList>
-            <p className="placeholder">LOGO</p>
+            <i>
+              <b>ez-present</b>
+            </i>
             <NavigationMenuItem>
-                <NavigationMenuLink><b>Home</b></NavigationMenuLink>
+              <NavigationMenuLink>
+                <i>Home</i>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-                <NavigationMenuLink><b>Upload</b></NavigationMenuLink>
+              <NavigationMenuLink>
+                <i>Upload</i>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-                <NavigationMenuLink><b>Help</b></NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-                <NavigationMenuLink><b>placeholder</b></NavigationMenuLink>
+              <NavigationMenuLink>
+                <i>Help</i>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

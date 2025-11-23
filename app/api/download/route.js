@@ -3,8 +3,8 @@ import { FishAudioClient } from "fish-audio";
 import { getDb } from "@/lib/mongodb";
 import { ObjectId, GridFSBucket } from "mongodb";
 
-function downloadStreamToBuf(id) {
-  const db = getDb();
+async function downloadStreamToBuf(id) {
+  const db = await getDb();
   const bucket = new GridFSBucket(db, { bucketName: "audios" });
   return new Promise((resolve, reject) => {
     const stream = bucket.openDownloadStream(id);
@@ -16,15 +16,21 @@ function downloadStreamToBuf(id) {
 }
 
 async function getSlideTransitions(id) {
-  const buf = await downloadStreamToBuf(id)
+  const buf = await downloadStreamToBuf(id);
 
   const file = new File(buf, id, {
-    type: "audio/mpeg"
-  })
+    type: "audio/mpeg",
+  });
 
-  const fish = FishAudioClient()
-  const res = await fishAudio.speechToText.convert({ audio: file });
-  console.log(res.segments);
+  const fish = new FishAudioClient();
+  console.log(buf);
+  console.log("BUFFER LENGTH", buf.length);
+  const res = await fish.speechToText.convert({ audio: file });
+
+  for (const seg of res.segments ?? [])
+    console.log(
+      `[${seg.start.toFixed(2)}s - ${seg.end.toFixed(2)}s] ${seg.text}`
+    );
 }
 
 export async function GET(req) {
@@ -62,9 +68,8 @@ export async function GET(req) {
       },
     });
 
-    getSlideTransitions(id)
-    for (const seg of res.segments ?? []) 
-      console.log(`[${seg.start.toFixed(2)}s - ${seg.end.toFixed(2)}s] ${seg.text}`);
+    await getSlideTransitions(presentation.audioFileId);
+
     // Return the file as a download
     return new Response(webStream, {
       headers: {
