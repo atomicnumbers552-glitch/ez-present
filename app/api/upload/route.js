@@ -51,9 +51,7 @@ export async function POST(req) {
     const result = await collection.insertOne({
       transcript,
       createdAt: new Date(),
-      $set: {
-        audioFileId: gridFSId
-      }
+      audioFileId: gridFSId,
     });
 
     return NextResponse.redirect(
