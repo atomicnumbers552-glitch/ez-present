@@ -1,5 +1,8 @@
 import { FishAudioClient } from "fish-audio";
+import { GeminiClient } from "@google-ai/gemini-api"; // adjust import if needed
 import { GoogleGenAI } from "@google/genai";
+import { getDb } from "@/lib/mongodb";
+import crypto from "crypto"
 
 // Uses Gemini document understanding to generate a transcript given the .pdf file containing the slides
 // Initialize Gemini client
@@ -34,8 +37,9 @@ export async function generateTranscript(slidesFile) {
 export async function generateClonedAudio(
   audioFile,
   sampleText,
-  textToConvert
+  textToConvert,
 ) {
+  const db = await getDb();
   if (!audioFile) throw new Error("No audio file provided");
   if (!textToConvert) throw new Error("No text to convert provided");
 
@@ -61,8 +65,34 @@ export async function generateClonedAudio(
     references: [referenceAudio],
   });
 
-  // result contains the generated audio (URL or blob depending on SDK)
-  return result;
+  const bucket = new GridFSBucket(db, { bucketName: "audios" });
+
+  async function saveAudio() {
+    const uploadStream = bucket.openUploadStream(crypto.randomUUID());
+
+    const reader = result.getReader();
+
+    async function pump() {
+      let done = false;
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        if (value) uploadStream.write(Buffer.from(value));
+        done = readerDone;
+      }
+      uploadStream.end();
+    }
+
+    await pump();
+
+    return new Promise((resolve, reject) => {
+      uploadStream.on("finish", () => resolve(uploadStream.id));
+      uploadStream.on("error", reject);
+    });
+  }
+
+
+  //return gridFS id
+  return await saveAudio();
 }
 
 export function combineToVideo() {

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
+import { ObjectId, GridFSBucket } from "mongodb";
 
 export async function GET(req) {
   try {
+    const bucket = new GridFSBucket(db, { bucketName: "audios " });
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id"); // pass ?id=<presentationId> in the download link
 
@@ -26,19 +27,21 @@ export async function GET(req) {
     }
 
     // Fetch the audio file from the stored URL
-    const audioResponse = await fetch(presentation.audioUrl);
+    const downloadStream = bucket.openDownloadStream(presentation.audioFileId);
+    const webStream = new ReadableStream({
+  async start(controller) {
+    downloadStream.on("data", (chunk) => controller.enqueue(chunk));
+    downloadStream.on("end", () => controller.close());
+    downloadStream.on("error", (err) => controller.error(err));
+  },
+});
 
-    if (!audioResponse.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch audio" },
-        { status: 500 }
-      );
-    }
+    res.setHeader("Content-Type", "audio/mpeg"); // change MIME type to match your file
+    res.setHeader("Content-Disposition", `attachment; filename="audio.mp3"`);
 
-    const audioBuffer = await audioResponse.arrayBuffer();
 
     // Return the file as a download
-    return new Response(audioBuffer, {
+    return new Response(webStream, {
       headers: {
         "Content-Type": "video/mp4", // or "audio/mpeg" / "audio/wav" depending on format
         "Content-Disposition": `attachment; filename="presentation_${id}.mp4"`,

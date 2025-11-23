@@ -32,7 +32,7 @@ export async function POST(req) {
     const transcript = await generateTranscript(slidesFile);
 
     // Step 2: generate cloned voice audio using reference audio
-    const finalAudio = await generateClonedAudio(
+    const gridFSId = await generateClonedAudio(
       audioFile,
       referenceText,
       transcript
@@ -50,8 +50,10 @@ export async function POST(req) {
 
     const result = await collection.insertOne({
       transcript,
-      audioUrl: finalAudio.audio,
       createdAt: new Date(),
+      $set: {
+        audioFileId: gridFSId
+      }
     });
 
     return NextResponse.redirect(
