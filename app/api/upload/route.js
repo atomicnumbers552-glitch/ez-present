@@ -8,12 +8,9 @@ export const dynamic = "force-dynamic";
 
 // in their sample audio, the user must say:
 
-
 // "This system converts written text into natural-sounding speech.
 // Each word is processed, analyzed for context, and generated with the correct intonation.
 // The goal is to make digital voices sound as close to human conversation as possible."
-
-
 
 import { NextResponse } from "next/server";
 import { generateTranscript, generateClonedAudio } from "./logicFunctions";
@@ -36,7 +33,7 @@ export async function POST(req) {
 
     // Step 1: generate transcript from slides
     const transcript = await generateTranscript(slidesFile);
-
+    console.log(transcript);
     // Step 2: generate cloned voice audio using reference audio
     const gridFSId = await generateClonedAudio(
       audioFile,
