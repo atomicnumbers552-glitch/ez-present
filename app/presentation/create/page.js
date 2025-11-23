@@ -98,7 +98,7 @@ export default function Page() {
           src={audioFile ? [audioFile] : []}
           className="dropzone"
         >
-          <DropzoneEmptyState>
+          {!audioFile ? (
             <div className="flex w-full items-center gap-4 p-8">
               <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                 <UploadIcon size={16} />
@@ -110,8 +110,9 @@ export default function Page() {
                 </p>
               </div>
             </div>
-          </DropzoneEmptyState>
-          <DropzoneContent />
+          ) : (
+            <p className="text-sm">{audioFile.name}</p>
+          )}
         </Dropzone>
 
         <Dropzone
@@ -122,7 +123,7 @@ export default function Page() {
           src={slidesFile ? [slidesFile] : []}
           className="dropzone"
         >
-          <DropzoneEmptyState>
+          {!slidesFile ? (
             <div className="flex w-full items-center gap-4 p-8">
               <div className="flex size-16 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                 <UploadIcon size={24} />
@@ -134,8 +135,9 @@ export default function Page() {
                 </p>
               </div>
             </div>
-          </DropzoneEmptyState>
-          <DropzoneContent />
+          ) : (
+            <p className="text-sm">{slidesFile.name}</p>
+          )}
         </Dropzone>
       </div>
 
