@@ -10,7 +10,7 @@
 // The goal is to make digital voices sound as close to human conversation as possible."
 
 import { NextResponse } from "next/server";
-import { generateClone, generateTranscript } from "./logicFunctions";
+import { generateTranscript, generateClonedAudio } from "./logicFunctions";
 import { getDb } from "@/lib/mongodb";
 
 export async function POST(req) {
@@ -54,7 +54,9 @@ export async function POST(req) {
       createdAt: new Date(),
     });
 
-    return NextResponse.redirect(`/download/`);
+    return NextResponse.redirect(
+      `/download?id=${result.insertedId.toString()}`
+    );
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
