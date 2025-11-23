@@ -39,8 +39,8 @@ export async function GET(req) {
     // Return the file as a download
     return new Response(webStream, {
       headers: {
-        "Content-Type": "video/mp4", // or "audio/mpeg" / "audio/wav" depending on format
-        "Content-Disposition": `attachment; filename="presentation_${id}.mp4"`,
+        "Content-Type": "audio/mpeg", // or "audio/mpeg" / "audio/wav" depending on format
+        "Content-Disposition": `attachment; filename="presentation_${id}.mp3"`,
       },
     });
   } catch (err) {

@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 // This file will do the following:
 //    1. use fish audio generate cloned audio from the user's inputted audio file
 //    2. use gemini to generate presentation transcript
@@ -53,10 +55,13 @@ export async function POST(req) {
       createdAt: new Date(),
       audioFileId: gridFSId,
     });
+    const id = result.insertedId.toString();
 
-    return NextResponse.redirect(
-      `/download?id=${result.insertedId.toString()}`
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    return NextResponse.redirect(`${baseUrl}/download?id=${id}`, {
+      status: 303,
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
