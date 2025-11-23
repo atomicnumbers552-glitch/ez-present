@@ -17,7 +17,7 @@ export async function generateTranscript(slidesFile) {
 
   const contents = [
     {
-      text: "You are given a pdf version of slides. Please generate a transcript that represents these slides, as if it is for a presentation or a lecture. Make sure to generate a transcript that makes sense when it is being read along in tandem with these slides. Please make sure to include absolutely no special characters. Make sure, that, when read by a text-to-voice agent, everything will read naturally. Do not include formatting or anything of that sort. Make sure that comprehensibility is the main focus.",
+      text: "You are given a pdf version of slides. Please generate a transcript that represents these slides, as if it is for a presentation or a lecture. Make sure to generate a transcript that makes sense when it is being read along in tandem with these slides. Please make sure to include absolutely no special characters. Make sure, that, when read by a text-to-voice agent, everything will read naturally. Do not include formatting or anything of that sort. Make sure that comprehensibility is the main focus. Also, this is EXTREMELY important: you must include the phrase: TRANSITION when the transcription changes from one page of the PDF to another. This is to ensure that, when we produce timestamps from speech to text, we can create a parallel slideshow that transitions at speaking timebreaks at slide transitions.",
     },
     {
       inlineData: {
