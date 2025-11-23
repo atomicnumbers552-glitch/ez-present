@@ -1,6 +1,31 @@
 import { NextResponse } from "next/server";
+import { FishAudioClient } from "fish-audio";
 import { getDb } from "@/lib/mongodb";
 import { ObjectId, GridFSBucket } from "mongodb";
+
+function downloadStreamToBuf(id) {
+  const db = getDb();
+  const bucket = new GridFSBucket(db, { bucketName: "audios" });
+  return new Promise((resolve, reject) => {
+    const stream = bucket.openDownloadStream(id);
+    const chunks = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("error", reject);
+    stream.on("end", () => resolve(Buffer.from(chunks)));
+  });
+}
+
+async function getSlideTransitions(id) {
+  const buf = await downloadStreamToBuf(id)
+
+  const file = new File(buf, id, {
+    type: "audio/mpeg"
+  })
+
+  const fish = FishAudioClient()
+  const res = await fishAudio.speechToText.convert({ audio: file });
+  console.log(res.segments);
+}
 
 export async function GET(req) {
   try {
@@ -37,6 +62,9 @@ export async function GET(req) {
       },
     });
 
+    getSlideTransitions(id)
+    for (const seg of res.segments ?? []) 
+      console.log(`[${seg.start.toFixed(2)}s - ${seg.end.toFixed(2)}s] ${seg.text}`);
     // Return the file as a download
     return new Response(webStream, {
       headers: {
