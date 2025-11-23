@@ -11,6 +11,7 @@
 
 import { NextResponse } from "next/server";
 import { generateClone, generateTranscript } from "./logicFunctions";
+import { getDb } from "@/lib/mongodb";
 
 export async function POST(req) {
   try {
@@ -31,20 +32,29 @@ export async function POST(req) {
     const transcript = await generateTranscript(slidesFile);
 
     // Step 2: generate cloned voice audio using reference audio
-    const modelId = await generateClonedAudio(audioFile, referenceText);
+    const finalAudio = await generateClonedAudio(
+      audioFile,
+      referenceText,
+      transcript
+    );
 
-    // Step 3: generate final narration audio for the transcript
-    const fish = new FishAudioClient();
-    const finalAudio = await fish.textToSpeech.convert({
-      text: transcript,
-      reference_id: modelId, // use the persistent model
-    });
+    // // Step 3: generate final narration audio for the transcript
+    // const fish = new FishAudioClient();
+    // const finalAudio = await fish.textToSpeech.convert({
+    //   text: transcript,
+    //   reference_id: modelId, // use the persistent model
+    // });
 
-    return NextResponse.json({
-      success: true,
-      audio: finalAudio.audio, // or URL if uploading to storage
+    const db = await getDb();
+    const collection = db.collection("presentations");
+
+    const result = await collection.insertOne({
       transcript,
+      audioUrl: finalAudio.audio,
+      createdAt: new Date(),
     });
+
+    return NextResponse.redirect(`/download/`);
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
