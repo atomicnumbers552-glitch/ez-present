@@ -34,8 +34,18 @@ export default function RootLayout({ children }) {
       >
         <NavigationMenu>
           <NavigationMenuList>
+            <p className="placeholder">LOGO</p>
             <NavigationMenuItem>
-                <NavigationMenuLink>Link</NavigationMenuLink>
+                <NavigationMenuLink><b>Home</b></NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+                <NavigationMenuLink><b>Upload</b></NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+                <NavigationMenuLink><b>Help</b></NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+                <NavigationMenuLink><b>placeholder</b></NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

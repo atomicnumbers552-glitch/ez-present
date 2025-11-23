@@ -55,6 +55,14 @@ h1 {
     margin: 10px;
 }
 
+.widgets {
+  align-self: center;
+}
+
+.placeholder {
+  font-size: xx-large;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
